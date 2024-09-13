@@ -31,8 +31,13 @@ export class TaskService {
             const project = await Projects.findOneBy({ id: projectId });
             if (!project) throw new NotFoundException("Projeto não encontrado.");
 
-            const tasks = await Tasks.find({ where: { project: { id: projectId } } });
+            const tasks = await Tasks.find({
+                where: { project: { id: projectId } },
+                relations: ["user"],
+            });
+
             if (tasks.length === 0) throw new NotFoundException("Nenhuma tarefa encontrada.");
+
             return tasks;
         } catch (error) {
             console.error(error);
