@@ -38,6 +38,7 @@ router.post("/", upload.single('image'), async (req: Request, res: Response) => 
     return res.status(500).send({ message: "Erro ao criar usuário." });
   }
 });
+
 router.use(protectedRoute);
 
 router.get("/", async (req: Request, res: Response) => {

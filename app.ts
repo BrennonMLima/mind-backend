@@ -1,6 +1,6 @@
 import * as express from "express";
 import { AppDataSource } from "./src/db/data-source";
-import { publicRouter, userRouter } from "./src/routes";
+import { projectRouter, publicRouter, taskRouter, userRouter } from "./src/routes";
 import * as cors from "cors"
 
 AppDataSource.initialize()
@@ -14,6 +14,9 @@ AppDataSource.initialize()
 const app = express();
 app.use(cors());
 app.use(express.json());
+app.use("/user", userRouter);
+app.use("/project", projectRouter);
+app.use("/task", taskRouter);
 app.use("/user", userRouter);
 app.use("", publicRouter);
 
