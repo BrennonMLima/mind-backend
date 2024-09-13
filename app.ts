@@ -1,28 +1,20 @@
 import * as express from "express";
-import publicRouter from "./src/routes/public.router";
-import groupRouter from "./src/routes/group.router";
-import userRouter from "./src/routes/user.router";
 import { AppDataSource } from "./src/db/data-source";
-import exceptionsMiddleware from "./src/middleware/exceptions.middleware";
+import { publicRouter, userRouter } from "./src/routes";
 import * as cors from "cors"
-
 
 AppDataSource.initialize()
   .then(() => {
-    console.log("Banco inicializado!");
+    console.log("Banco Inicializado!");
   })
   .catch((err) => {
-    console.error("Erro durante a inicialização do banco: ", err);
+    console.log("Erro ao inicializar o banco.", err);
   });
 
 const app = express();
-
-app.use(cors())
+app.use(cors());
 app.use(express.json());
 app.use("/user", userRouter);
-app.use("/group", groupRouter);
 app.use("", publicRouter);
-app.use(exceptionsMiddleware);
-
 
 app.listen(8000);
