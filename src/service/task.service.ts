@@ -7,7 +7,7 @@ export class TaskService {
     static async getAllTasks(): Promise<Tasks[]> {
         try {
             const tasks = await Tasks.find();
-            if (tasks.length === 0) throw new NotFoundException("Nenhuma tarefa encontrada.");
+            if (tasks.length === 0) return [];
             return tasks;
         } catch (error) {
             console.error(error);
@@ -36,7 +36,7 @@ export class TaskService {
                 relations: ["user"],
             });
 
-            if (tasks.length === 0) throw new NotFoundException("Nenhuma tarefa encontrada.");
+            if (tasks.length === 0) return [];
 
             return tasks;
         } catch (error) {

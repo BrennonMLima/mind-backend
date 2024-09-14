@@ -10,6 +10,25 @@ const fs = require('fs');
 const router = express.Router();
 const upload = multer({ dest: 'uploads/' });
 
+router.get("/users", async (req: Request, res: Response) => {
+  try {
+    const users = await UserService.getAllUsers();
+
+    const usersDTO = users.map(user => ({
+      email: user.email,
+      name: user.name,
+      createdAt: user.createdAt,
+      image: user.image,
+      id: user.id,
+    } as UserDTO));
+
+    return res.status(200).send({ users: usersDTO });
+  } catch (error) {
+    console.error("Erro ao consultar usuários:", error);
+    return res.status(500).send({ message: "Erro ao consultar tabela de usuários." });
+  }
+});
+
 router.post("/", upload.single('image'), async (req: Request, res: Response) => {
   const { name, email, password } = req.body;
 
