@@ -9,13 +9,9 @@ const router = express.Router();
 router.use(protectedRoute);
 
 router.post("/", async (req: Request, res: Response) => {
-    const { projectId, name, description, dueDate, status } = req.body;
-    const { authorization } = req.headers;
-    const token = authorization.split(" ")[1];
-
+    const { project, user, name, description, dueDate, status } = req.body;
     try {
-        const user = jwt.decode(token) as TokenPayload;
-        const task = await TaskService.createTask(user.id, projectId, {
+        const task = await TaskService.createTask(user.id, project.id, {
             name,
             description,
             dueDate,
@@ -68,14 +64,15 @@ router.delete("/:id", async (req: Request, res: Response) => {
 
 router.put("/:id", async (req: Request, res: Response) => {
     const { id } = req.params;
-    const taskData = req.body;
+    const { userId, ...taskData } = req.body; // Extraímos o userId separadamente
 
     try {
-        const updatedTask = await TaskService.updateTask(id, taskData);
+        const updatedTask = await TaskService.updateTask(id, taskData, userId); // Passamos o userId aqui
         res.status(200).json(updatedTask);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
 });
+
 
 export default router;

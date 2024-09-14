@@ -8,6 +8,6 @@ export const AppDataSource = new DataSource({
   password: "Brennon_123",
   database: "mind",
   entities: ["src/models/*.ts"],
-  logging: true,
+  logging: false,
   synchronize: true,
 });

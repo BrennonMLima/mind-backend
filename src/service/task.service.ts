@@ -64,10 +64,16 @@ export class TaskService {
         }
     }
 
-    static async updateTask(taskId: string, taskData: Partial<Tasks>): Promise<Tasks> {
+    static async updateTask(taskId: string, taskData: Partial<Tasks>, userId: string): Promise<Tasks> {
         try {
             const task = await Tasks.findOneBy({ id: taskId });
             if (!task) throw new NotFoundException("Tarefa não encontrada.");
+
+            if (userId) {
+                const user = await Users.findOneBy({ id: userId });
+                if (!user) throw new NotFoundException("Usuário não encontrado.");
+                task.user = user; // Atribui o usuário à tarefa
+            }
 
             Object.assign(task, taskData);
             const updatedTask = await Tasks.save(task);
@@ -77,6 +83,7 @@ export class TaskService {
             throw new InternalException("Erro ao atualizar tarefa.");
         }
     }
+
 
     static async deleteTask(taskId: string): Promise<void> {
         try {
