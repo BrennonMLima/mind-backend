@@ -72,7 +72,7 @@ export class TaskService {
             if (userId) {
                 const user = await Users.findOneBy({ id: userId });
                 if (!user) throw new NotFoundException("Usuário não encontrado.");
-                task.user = user; // Atribui o usuário à tarefa
+                task.user = user;
             }
 
             Object.assign(task, taskData);
